@@ -4,15 +4,11 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import Video from "react-native-video";
-import {
-  ExpoLiquidGlassView,
-  CornerStyle,
-  LiquidGlassType,
-} from "expo-liquid-glass-view";
-import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
+
+import { ExpoLiquidGlassView } from "expo-liquid-glass-view";
 
 const WIDTH: number = 300;
 const HEIGHT: number = 300;
@@ -45,117 +41,28 @@ const App = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Video
-        source={require("./video/background-beach.mp4")}
-        style={StyleSheet.absoluteFillObject}
-        muted
-        repeat
-        resizeMode="cover"
-      />
-
-      <SafeAreaView style={styles.overlay}>
-        <View style={styles.videoContainer}>
-          <Video
-            source={require("./video/fish-pond.mp4")}
-            style={styles.video}
-            muted
-            repeat
-            resizeMode="cover"
-            onLoad={() => setVideoLoaded(true)}
-            onLoadStart={() => setVideoLoaded(false)}
-          />
-
-          {videoLoaded && (
-            <ExpoLiquidGlassView
-              key={forceUpdate}
-              cornerRadius={BORDER_RADIUS}
-              style={styles.glassOverlay}
-              type={LiquidGlassType.Clear}
-              cornerStyle={CornerStyle.Continuous}
-            >
-              <View style={styles.glassContent}>
-                <View style={styles.innerView} />
-              </View>
-            </ExpoLiquidGlassView>
-          )}
-        </View>
-
-        <View style={styles.bottomContent}>
-          <ExpoLiquidGlassView
-            cornerRadius={16}
-            cornerStyle={CornerStyle.Circular}
-            type={LiquidGlassType.Clear}
-            style={styles.statsCard}
+    <ImageBackground
+      style={styles.container}
+      source={{
+        uri: "https://i.pinimg.com/736x/eb/b4/68/ebb4685cc02c29730294e9c6ecdbec9f.jpg",
+      }}
+    >
+      <View>
+        <ExpoLiquidGlassView style={{ borderRadius: 100 }} cornerRadius={300}>
+          <View
+            style={{
+              width: 400,
+              height: 400,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 100,
+            }}
           >
-            <View style={styles.statsContent}>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>24°C</Text>
-                <Text style={styles.statLabel}>Temperature</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>8</Text>
-                <Text style={styles.statLabel}>Fish</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>94%</Text>
-                <Text style={styles.statLabel}>Oxygen</Text>
-              </View>
-            </View>
-          </ExpoLiquidGlassView>
-
-          <View style={styles.controls}>
-            <TouchableOpacity style={styles.controlButton}>
-              <ExpoLiquidGlassView
-                cornerRadius={25}
-                cornerStyle={CornerStyle.Circular}
-                type={LiquidGlassType.Clear}
-                style={styles.controlGlass}
-              >
-                <View style={styles.controlContent}>
-                  <MaterialCommunityIcons
-                    name="food-turkey"
-                    size={24}
-                    color="white"
-                  />
-                </View>
-              </ExpoLiquidGlassView>
-              <Text style={styles.controlText}>Feed</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.controlButton}>
-              <ExpoLiquidGlassView
-                cornerRadius={25}
-                cornerStyle={CornerStyle.Circular}
-                type={LiquidGlassType.Clear}
-                style={styles.controlGlass}
-              >
-                <View style={styles.controlContent}>
-                  <FontAwesome6 name="lightbulb" size={24} color="white" />
-                </View>
-              </ExpoLiquidGlassView>
-              <Text style={styles.controlText}>Light</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.controlButton}>
-              <ExpoLiquidGlassView
-                cornerRadius={25}
-                cornerStyle={CornerStyle.Circular}
-                type={LiquidGlassType.Clear}
-                style={styles.controlGlass}
-              >
-                <View style={styles.controlContent}>
-                  <FontAwesome6 name="gear" size={22} color="white" />
-                </View>
-              </ExpoLiquidGlassView>
-              <Text style={styles.controlText}>Settings</Text>
-            </TouchableOpacity>
+            <Text style={{ color: "black" }}>Hello, from liquid glass!</Text>
           </View>
-        </View>
-      </SafeAreaView>
-    </View>
+        </ExpoLiquidGlassView>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -165,6 +72,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
   },
   overlay: {
     flex: 1,

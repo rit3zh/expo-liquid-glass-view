@@ -6,51 +6,100 @@ class ExpoLiquidGlassViewProps: ExpoSwiftUI.ViewProps {
     @Field var type: String
     @Field var cornerStyle: String
     @Field var tint: String
+    @Field var isInteractive: Bool
 }
 
 struct ExpoLiquidGlassView: ExpoSwiftUI.View, ExpoSwiftUI.WithHostingView {
-  let props: ExpoLiquidGlassViewProps
-  
+    @ObservedObject var props: ExpoLiquidGlassViewProps
+    
     var body: some View {
         if #available(iOS 26.0, *) {
-            Children().glassEffect(getGlassEffect(from: props.type,color: props.tint),in: .rect(cornerRadius: props.cornerRadius,style: getCornerRadiusStyle(from: props.cornerStyle)))
-        
-        } else  {
-            Children()
+            if hasChildren {
+                Children()
+                    .glassEffect(
+                        getGlassEffect(
+                            from: props.type,
+                            color: props.tint,
+                            interactive: props.isInteractive
+                        ),
+                        in: .rect(
+                            cornerRadius: props.cornerRadius,
+                            style: getCornerRadiusStyle(from: props.cornerStyle)
+                        )
+                    )
+            } else {
+                RoundedRectangle(
+                    cornerRadius: props.cornerRadius,
+                    style: getCornerRadiusStyle(from: props.cornerStyle)
+                )
+                .fill(Color.clear)
+                .frame(width: 100, height: 100)
+                .glassEffect(
+                    getGlassEffect(
+                        from: props.type,
+                        color: props.tint,
+                        interactive: props.isInteractive
+                    ),
+                    in: .rect(
+                        cornerRadius: props.cornerRadius,
+                        style: getCornerRadiusStyle(from: props.cornerStyle)
+                    )
+                )
+            }
+        } else {
+            if hasChildren {
+                Children()
+            } else {
+                RoundedRectangle(
+                    cornerRadius: props.cornerRadius,
+                    style: getCornerRadiusStyle(from: props.cornerStyle)
+                )
+                .fill(Color.clear)
+                .frame(width: 100, height: 100)
+            }
         }
+    }
+    
+    
+    private var hasChildren: Bool {
+        
+        !(Children().data.isEmpty)
     }
 }
 
 private func getCornerRadiusStyle(from style: String) -> RoundedCornerStyle {
     switch style.lowercased() {
     case "continuous":
-      return .continuous
+        return .continuous
     case "circular":
-      return .circular
+        return .circular
     default:
-      return .continuous // Default fallback
+        return .continuous
     }
-  }
-
-
-@available(iOS 26.0, *)
-private func getGlassEffect(from type: String, color: String) -> Glass {
-  switch type.lowercased() {
-  case "clear":
-      return .clear
-  case "identity":
-      return .identity
-  case "regular":
-      return .regular
-  case "interactive":
-      return .regular.interactive()
-  case "tint":
-      return .regular.tint(Color(hex: color))
-  default:
-    return .clear
-  }
 }
 
+@available(iOS 26.0, *)
+private func getGlassEffect(from type: String, color: String, interactive: Bool) -> Glass {
+    var glass: Glass
+    switch type.lowercased() {
+    case "clear":
+        glass = .clear
+    case "identity":
+        glass = .identity
+    case "regular":
+        glass = .regular
+    case "tint":
+        glass = .regular.tint(Color(hex: color))
+    default:
+        glass = .clear
+    }
+    
+    if interactive {
+        return glass.interactive()
+    }
+    
+    return glass
+}
 
 extension Color {
     init(hex: String) {

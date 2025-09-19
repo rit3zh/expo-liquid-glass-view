@@ -18,6 +18,7 @@ export interface ExpoLiquidGlassViewProps {
   type?: LiquidGlassType;
   tint?: string;
   cornerRadius?: number;
+  isInteractive?: boolean;
   cornerStyle?: CornerStyle;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;

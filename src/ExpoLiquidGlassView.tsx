@@ -10,14 +10,15 @@ const NativeView: React.ComponentType<ExpoLiquidGlassViewProps> =
   );
 
 export function ExpoLiquidGlassView(props: ExpoLiquidGlassViewProps) {
+  const { children, containerStyle, style, ...nativeProps } = props;
+
   return (
     <NativeView
-      {...props}
-      style={[styles.wrapper, props.style]}
-      key={Math.random().toString()}
+      {...nativeProps}
+      style={[styles.wrapper, style]}
     >
-      {props.children ? (
-        <View style={styles.container}>{props.children}</View>
+      {children ? (
+        <View style={[styles.container, containerStyle]}>{children}</View>
       ) : null}
     </NativeView>
   );

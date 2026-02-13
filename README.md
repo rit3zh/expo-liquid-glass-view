@@ -63,6 +63,7 @@ export default function App() {
       tint="#000000"
       cornerRadius={24}
       style={{ width: 200, height: 200, alignSelf: "center", marginTop: 100 }}
+      containerStyle={{ padding: 16, alignItems: "center" }}
     >
       <Text style={{ color: "#fff", textAlign: "center" }}>
         Liquid Glass ✨
@@ -82,7 +83,8 @@ export default function App() {
 | `tint`         | `string`                                                        | `undefined`    | Optional iOS system tint, like `"systemUltraThinMaterial"` or custom color |
 | `cornerRadius` | `number`                                                        | `12`           | Border radius in points                                                    |
 | `cornerStyle`  | `"continuous"` \| `"circular"`                                  | `"continuous"` | Defines the curvature style of the corners                                 |
-| `style`        | `StyleProp<ViewStyle>`                                          | `undefined`    | React Native style object                                                  |
+| `style`        | `StyleProp<ViewStyle>`                                          | `undefined`    | Style for the outer native glass view                                      |
+| `containerStyle` | `StyleProp<ViewStyle>`                                        | `undefined`    | Style for the inner content container that wraps `children`                |
 | `children`     | `React.ReactNode`                                               | `undefined`    | Optional React children to render inside the glass                         |
 
 ---
@@ -109,6 +111,7 @@ export interface ExpoLiquidGlassViewProps {
   cornerRadius?: number;
   cornerStyle?: CornerStyle;
   style?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
 ```

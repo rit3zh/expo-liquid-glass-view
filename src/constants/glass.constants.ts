@@ -1,0 +1,28 @@
+const GLASS_VARIANTS = ["regular", "clear"] as const;
+const GLASS_RENDERERS = ["auto", "native", "metal"] as const;
+const GLASS_ACTIVE_RENDERERS = ["native", "metal", "fallback-blur"] as const;
+const GLASS_CORNER_STYLES = ["continuous", "circular"] as const;
+
+const DEFAULT_GLASS_VARIANT = "regular";
+const DEFAULT_GLASS_RENDERER = "auto";
+const DEFAULT_GLASS_CORNER_STYLE = "continuous";
+
+const DEFAULT_HIGHLIGHT_ANGLE = 135;
+const DEFAULT_BORDER_WIDTH = 1;
+const DEFAULT_GLASS_OPACITY = 1;
+
+const MIN_IOS_VERSION_FOR_NATIVE_GLASS = 26;
+
+export {
+  GLASS_VARIANTS,
+  GLASS_RENDERERS,
+  GLASS_ACTIVE_RENDERERS,
+  GLASS_CORNER_STYLES,
+  DEFAULT_GLASS_VARIANT,
+  DEFAULT_GLASS_RENDERER,
+  DEFAULT_GLASS_CORNER_STYLE,
+  DEFAULT_HIGHLIGHT_ANGLE,
+  DEFAULT_BORDER_WIDTH,
+  DEFAULT_GLASS_OPACITY,
+  MIN_IOS_VERSION_FOR_NATIVE_GLASS,
+};

@@ -1,179 +1,58 @@
+import { StyleSheet } from "react-native";
+import { useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import LiquidGlassDemo from "./screens/LiquidGlassDemo";
+import ScrollDemo from "./screens/ScrollDemo";
+import FlatListDemo from "./screens/FlatListDemo";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
-import React, { useState, useEffect } from "react";
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from "react-native-reanimated";
 
-import { ExpoLiquidGlassView } from "expo-liquid-glass-view";
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
-const WIDTH: number = 300;
-const HEIGHT: number = 300;
-const BORDER_RADIUS: number = 999;
+const DEMOS = {
+  scroll: ScrollDemo,
+  drag: LiquidGlassDemo,
+  flatlist: FlatListDemo,
+} as const;
 
-const App = () => {
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [forceUpdate, setForceUpdate] = useState(0);
+type DemoKey = keyof typeof DEMOS;
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setForceUpdate((prev) => prev + 1);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [videoLoaded]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setForceUpdate((prev) => prev + 1);
-    }, 1000);
-
-    const cleanup = setTimeout(() => {
-      clearInterval(interval);
-    }, 3000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(cleanup);
-    };
-  }, []);
+export default function App() {
+  const [demo] = useState<DemoKey>("drag");
+  const Current = DEMOS[demo];
 
   return (
-    <ImageBackground
-      style={styles.container}
-      source={{
-        uri: "https://i.pinimg.com/736x/eb/b4/68/ebb4685cc02c29730294e9c6ecdbec9f.jpg",
-      }}
-    >
-      <View>
-        <ExpoLiquidGlassView style={{ borderRadius: 100 }} cornerRadius={300}>
-          <View
-            style={{
-              width: 400,
-              height: 400,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 100,
-            }}
-          >
-            <Text style={{ color: "black" }}>Hello, from liquid glass!</Text>
-          </View>
-        </ExpoLiquidGlassView>
-      </View>
-    </ImageBackground>
+    <KeyboardProvider enabled>
+      <GestureHandlerRootView style={styles.container}>
+        <Current />
+      </GestureHandlerRootView>
+    </KeyboardProvider>
   );
-};
-
-export default App;
+}
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#0d0d0d",
     flex: 1,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
   },
-  overlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  videoContainer: {
-    position: "relative",
-    width: WIDTH,
-    height: HEIGHT,
-    borderRadius: BORDER_RADIUS,
-    overflow: "hidden",
-    bottom: 100,
-  },
-  video: {
-    width: WIDTH,
-    height: HEIGHT,
+  switcher: {
     position: "absolute",
-    top: 0,
-    left: 0,
-  },
-  glassOverlay: {
-    height: HEIGHT,
-    width: WIDTH,
-  },
-  glassContent: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  innerView: {
-    overflow: "hidden",
-    width: WIDTH,
-    height: HEIGHT,
-    borderRadius: BORDER_RADIUS,
-  },
-  bottomContent: {
-    width: "90%",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    height: "90%",
-    position: "absolute",
-  },
-  statsCard: {
-    width: "80%",
-    height: 80,
-    marginBottom: 40,
-  },
-  statsContent: {
-    flex: 1,
+    top: 60,
+    right: 16,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 20,
+    gap: 6,
+    backgroundColor: "#00000066",
+    borderRadius: 10,
+    padding: 4,
   },
-  statItem: {
-    alignItems: "center",
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#ffffff",
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: "#888888",
-    fontWeight: "400",
-  },
-  statDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: "#333333",
-  },
-  controls: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 40,
-    marginBottom: 40,
-  },
-  controlButton: {
-    alignItems: "center",
-  },
-  controlGlass: {
-    width: 50,
-    height: 50,
-    marginBottom: 12,
-  },
-  controlContent: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  controlIcon: {
-    fontSize: 20,
-  },
-  controlText: {
-    fontSize: 14,
-    color: "#cccccc",
-    fontWeight: "400",
-  },
+  tab: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 7 },
+  tabActive: { backgroundColor: "#ffffff2e" },
+  tabText: { color: "#c7cedb", fontSize: 12 },
+  tabTextActive: { color: "#fff", fontWeight: "700" },
 });

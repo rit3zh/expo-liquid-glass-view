@@ -20,10 +20,39 @@ Pod::Spec.new do |s|
 
   s.dependency 'ExpoModulesCore'
 
-  # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
   }
 
-  s.source_files = "**/*.{h,m,mm,swift,hpp,cpp}"
+  s.source_files = "**/*.{h,m,mm,swift,hpp,cpp,metal}"
+
+  s.resource_bundles = {
+    'ExpoLiquidGlassShaders' => ['Shaders/bundle-marker.txt']
+  }
+
+  s.script_phases = [
+    {
+      :name => 'Bundle compiled Metal shaders',
+      :execution_position => :after_compile,
+      :shell_path => '/bin/sh',
+      :script => <<-SCRIPT.gsub(/^ {8}/, '')
+        set -e
+
+        METALLIB="${TARGET_BUILD_DIR}/default.metallib"
+        BUNDLE="${TARGET_BUILD_DIR}/ExpoLiquidGlassShaders.bundle"
+
+        if [ ! -f "$METALLIB" ]; then
+          echo "error: default.metallib not found at $METALLIB - were the .metal files compiled?"
+          exit 1
+        fi
+
+        if [ ! -d "$BUNDLE" ]; then
+          echo "error: ExpoLiquidGlassShaders.bundle not found at $BUNDLE"
+          exit 1
+        fi
+
+        cp "$METALLIB" "$BUNDLE/default.metallib"
+      SCRIPT
+    }
+  ]
 end

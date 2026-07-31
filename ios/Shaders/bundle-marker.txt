@@ -1,0 +1,6 @@
+Placeholder so CocoaPods creates ExpoLiquidGlassShaders.bundle.
+
+The bundle's real payload is default.metallib, which the podspec's
+"Bundle compiled Metal shaders" script phase copies in after Xcode
+compiles Shaders/*.metal. A resource bundle needs at least one
+pod-install-time file to exist, hence this marker.
